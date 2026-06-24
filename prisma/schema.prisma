@@ -1,0 +1,196 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/client"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  searches  Search[]
+  leads     Lead[]
+  campaigns Campaign[]
+  whatsappSessions WhatsappSession[]
+}
+
+model Search {
+  id              String       @id @default(cuid())
+  userId          String
+  niche           String
+  city            String
+  neighborhood    String?
+  query           String
+  platform        String       @default("MAPS")
+  minScore        String?
+  digitalStatus   String?
+  orderBy         String?
+  maxLeads        Int          @default(50)
+  status          SearchStatus @default(PENDING)
+  totalFound      Int          @default(0)
+  totalSaved      Int          @default(0)
+  errorMessage    String?
+  startedAt       DateTime?
+  finishedAt      DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  user  User        @relation(fields: [userId], references: [id])
+  leads Lead[]
+  logs  SearchLog[]
+}
+
+enum SearchStatus {
+  PENDING
+  STARTING_BROWSER
+  SEARCHING_MAPS
+  COLLECTING_CARDS
+  OPENING_PLACES
+  SAVING_LEADS
+  FINISHED
+  ERROR
+  CANCELLED
+}
+
+model SearchLog {
+  id        String   @id @default(cuid())
+  searchId  String
+  level     LogLevel @default(INFO)
+  message   String
+  createdAt DateTime @default(now())
+
+  search Search @relation(fields: [searchId], references: [id])
+}
+
+enum LogLevel {
+  INFO
+  WARNING
+  ERROR
+}
+
+model Lead {
+  id              String       @id @default(cuid())
+  userId          String
+  searchId        String
+  name            String
+  category        String?
+  rating          Float?
+  reviewCount     Int?
+  address         String?
+  neighborhood    String?
+  city            String?
+  phone           String?
+  website         String?
+  mapsUrl         String?
+  businessStatus  String?
+  openingHours    String?
+  hasWebsite      Boolean      @default(false)
+  websiteType     WebsiteType?
+  score           Int          @default(0)
+  scoreLabel      ScoreLabel   @default(COLD)
+  scoreReason     String?
+  crmStatus       CrmStatus    @default(NEW)
+  inPipeline      Boolean      @default(false)
+  approachMessage String?
+  dealValue       Float?
+  rawData         Json?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  search Search @relation(fields: [searchId], references: [id])
+  campaignContacts CampaignContact[]
+
+  @@unique([userId, name, address])
+}
+
+enum WebsiteType {
+  NONE
+  OWN_DOMAIN
+  INSTAGRAM
+  FACEBOOK
+  LINKTREE
+  WHATSAPP
+  OTHER
+}
+
+enum ScoreLabel {
+  COLD
+  MEDIUM
+  HOT
+}
+
+enum CrmStatus {
+  NEW
+  CONTACTED
+  REPLIED
+  MEETING
+  CLOSED
+  LOST
+  IGNORED
+}
+
+model Campaign {
+  id              String       @id @default(cuid())
+  userId          String
+  name            String       @default("Nova Campanha")
+  template        String
+  delayMin        Int          @default(30)
+  delayMax        Int          @default(60)
+  status          CampaignStatus @default(DRAFT)
+  totalLeads      Int          @default(0)
+  totalSent       Int          @default(0)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  user            User         @relation(fields: [userId], references: [id])
+  contacts        CampaignContact[]
+}
+
+enum CampaignStatus {
+  DRAFT
+  PENDING
+  RUNNING
+  PAUSED
+  COMPLETED
+  ERROR
+}
+
+model CampaignContact {
+  id              String       @id @default(cuid())
+  campaignId      String
+  leadId          String
+  status          ContactStatus @default(PENDING)
+  sentAt          DateTime?
+  errorMessage    String?
+  createdAt       DateTime     @default(now())
+
+  campaign        Campaign     @relation(fields: [campaignId], references: [id])
+  lead            Lead         @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  
+  @@unique([campaignId, leadId])
+}
+
+enum ContactStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+model WhatsappSession {
+  id              String       @id @default(cuid())
+  userId          String       @unique
+  status          String       @default("DISCONNECTED")
+  qrCode          String?      @db.Text
+  connectedAt     DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  user            User         @relation(fields: [userId], references: [id])
+}

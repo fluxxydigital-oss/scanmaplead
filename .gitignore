@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# Custom ignores
+.wwebjs_auth/
+.wwebjs_cache/
+dump.rdb
+redis/
+scratch/
+next-dev-*.log
+*.err.log
