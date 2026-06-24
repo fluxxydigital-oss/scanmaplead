@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     const validation = createSearchSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
-        { error: validation.error.errors[0].message },
+        { error: validation.error.message },
         { status: 400 }
       );
     }

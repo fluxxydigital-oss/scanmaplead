@@ -113,7 +113,7 @@ export default async function DashboardPage({
   }
 
   // Gráfico de Evolução (Daily Leads)
-  let dailyData = [];
+  let dailyData: any[] = [];
   if (daysFilter && !isNaN(daysFilter)) {
     // Busca agrupada do Prisma
     const leadsByDate = await db.lead.groupBy({

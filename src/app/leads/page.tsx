@@ -42,6 +42,7 @@ interface Lead {
   scoreReason?: string;
   crmStatus: "NEW" | "CONTACTED" | "REPLIED" | "MEETING" | "CLOSED" | "LOST" | "IGNORED";
   approachMessage?: string;
+  dealValue?: number;
   createdAt: string;
 }
 
