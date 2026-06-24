@@ -8,7 +8,10 @@ const prismaClientSingleton = () => {
     throw new Error("A variável de ambiente DATABASE_URL não está configurada.");
   }
 
-  const pool = new Pool({ connectionString });
+  const pool = new Pool({ 
+    connectionString,
+    ssl: connectionString.includes('localhost') ? false : { rejectUnauthorized: false }
+  });
   const adapter = new PrismaPg(pool);
 
   return new PrismaClient({ adapter });
