@@ -130,6 +130,8 @@ export async function POST(request: Request) {
     });
 
     // O Worker em background agora fará o polling automático pelo status PENDING
+    // Acorda o robô na Render caso ele tenha dormido por inatividade (Plano Grátis)
+    fetch("https://scanmaplead.onrender.com").catch((err) => console.log("Aviso: Falha ao pingar Render", err.message));
 
     return NextResponse.json(search, { status: 201 });
   } catch (error: any) {
