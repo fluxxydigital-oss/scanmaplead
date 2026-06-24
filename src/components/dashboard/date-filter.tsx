@@ -11,7 +11,8 @@ export function DateFilter() {
   // Default to 30 days if no param
   const currentDays = searchParams.get("days") || "30";
 
-  const handleValueChange = (value: string) => {
+  const handleValueChange = (value: string | null) => {
+    if (!value) return;
     const params = new URLSearchParams(searchParams.toString());
     params.set("days", value);
     router.push(`/dashboard?${params.toString()}`);

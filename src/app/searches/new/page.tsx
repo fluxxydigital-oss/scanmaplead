@@ -46,7 +46,7 @@ const searchFormSchema = z.object({
   minScore: z.string().optional(),
   digitalStatus: z.string().optional(),
   orderBy: z.string().optional(),
-  platform: z.string().default("MAPS"),
+  platform: z.string().optional(),
 });
 
 type SearchFormValues = z.infer<typeof searchFormSchema>;

@@ -255,7 +255,7 @@ export default function LeadsPage() {
               />
             </div>
             
-            <Select value={selectedCrmStatus} onValueChange={setSelectedCrmStatus}>
+            <Select value={selectedCrmStatus} onValueChange={(val) => setSelectedCrmStatus(val || "Todos")}>
               <SelectTrigger className="w-[118px] h-[32px] bg-[#101217] border border-white/[0.075] rounded-[7px] text-[12px] text-white focus:outline-none focus:border-[#20D66B]/50 transition-colors px-3 flex justify-between items-center">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -271,7 +271,7 @@ export default function LeadsPage() {
               </SelectContent>
             </Select>
 
-            <Select value={selectedScore} onValueChange={setSelectedScore}>
+            <Select value={selectedScore} onValueChange={(val) => setSelectedScore(val || "Todos")}>
               <SelectTrigger className="w-[118px] h-[32px] bg-[#101217] border border-white/[0.075] rounded-[7px] text-[12px] text-white focus:outline-none focus:border-[#20D66B]/50 transition-colors px-3 flex justify-between items-center">
                 <SelectValue placeholder="Score" />
               </SelectTrigger>
@@ -283,7 +283,7 @@ export default function LeadsPage() {
               </SelectContent>
             </Select>
 
-            <Select value={selectedWebType} onValueChange={setSelectedWebType}>
+            <Select value={selectedWebType} onValueChange={(val) => setSelectedWebType(val || "Todos")}>
               <SelectTrigger className="w-[118px] h-[32px] bg-[#101217] border border-white/[0.075] rounded-[7px] text-[12px] text-white focus:outline-none focus:border-[#20D66B]/50 transition-colors px-3 flex justify-between items-center">
                 <SelectValue placeholder="Presença" />
               </SelectTrigger>

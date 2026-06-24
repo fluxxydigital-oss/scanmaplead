@@ -242,7 +242,7 @@ export default function PipelinePage() {
     ];
 
     boardData.forEach(col => {
-      col.cards.forEach(card => {
+      col.cards.forEach((card: any) => {
         rows.push([
           `"${card.business}"`,
           `"${card.segment}"`,
@@ -376,7 +376,7 @@ export default function PipelinePage() {
 
                 {/* Cards Container */}
                 <div className="flex flex-col gap-3">
-                  {col.cards.map((card, cardIndex) => (
+                  {col.cards.map((card: any, cardIndex: number) => (
                     <div
                       key={card.id}
                       draggable
